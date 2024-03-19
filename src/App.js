@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
+
+import { markets } from './data';
 
 function App() {
+  // States for selected markets and products
+  const [selectedMarkets, setSelectedMarkets] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+
+
+  // Handler for market selection changes
+  const handleMarketsChange = selectedOptions => {
+    setSelectedMarkets(selectedOptions);
+  };
+
+  // Handler for product selection changes
+  const handleProductsChange = selectedOptions => {
+    setSelectedProducts(selectedOptions);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex min-h-screen">
+      <div className="w-1/4 bg-red-500 p-4">
+        <Sidebar
+          markets={markets}
+          onMarketsChange={handleMarketsChange}
+          onProductsChange={handleProductsChange}
+          selectedMarkets={selectedMarkets}
+          selectedProducts={selectedProducts}
+        />
+      </div>
+      <div className="w-3/4 p-4">
+        <MainContent
+          selectedMarkets={selectedMarkets}
+          selectedProducts={selectedProducts}
+        />
+      </div>
     </div>
   );
 }
