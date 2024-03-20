@@ -33,10 +33,8 @@ function App() {
         />
       </div>
       <div className="w-3/4 p-4">
-        <MainContent
-          selectedMarkets={selectedMarkets}
-          selectedProducts={selectedProducts}
-        />
+      <MainContent markets={markets} selectedMarkets={selectedMarkets} selectedProducts={selectedProducts} />
+
       </div>
     </div>
   );

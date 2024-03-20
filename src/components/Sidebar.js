@@ -8,24 +8,41 @@ const Sidebar = ({ markets, onMarketsChange, onProductsChange, selectedMarkets, 
     label: market.name
   }));
 
-  // Filter and create options for products based on selected markets
+  // Helper function to get all products from all markets
+  const getAllProductOptions = () => {
+    return markets.reduce((acc, market) => [
+      ...acc,
+      ...market.products.map(product => ({
+        value: product.name,
+        label: `${product.name} (${market.name})`, // Include market name for clarity
+        region: product.region // Include region data for possible future use
+      }))
+    ], []);
+  };
+
+  // Determine product options based on selected markets
   let productOptions = [];
   if (selectedMarkets && selectedMarkets.length > 0) {
+    // Filter products based on selected markets
     markets.forEach(market => {
       if (selectedMarkets.find(selectedMarket => selectedMarket.value === market.name)) {
         productOptions = productOptions.concat(market.products.map(product => ({
           value: product.name,
-          label: `${product.name} (${market.name})`, // Include market name for clarity
-          region: product.region // Include region data for possible future use
+          label: `${product.name} (${market.name})`,
+          region: product.region
         })));
       }
     });
+  } else {
+    // If no market is selected, show all products from all markets
+    productOptions = getAllProductOptions();
   }
 
   // Handling market selection changes
   const handleMarketsChange = (selectedOptions) => {
     onMarketsChange(selectedOptions);
-    onProductsChange([]); // Reset products selection when market changes
+    // Optionally reset products selection when market changes, or you might keep it as per your app's logic
+    // onProductsChange([]);
   };
 
   // Handling product selection changes
@@ -54,7 +71,7 @@ const Sidebar = ({ markets, onMarketsChange, onProductsChange, selectedMarkets, 
           onChange={handleProductsChange}
           value={selectedProducts}
           placeholder="Select Products..."
-          isDisabled={!selectedMarkets || selectedMarkets.length === 0}
+          // Removed the disable condition to allow showing all products when no market is selected
         />
       </div>
     </div>
@@ -62,4 +79,3 @@ const Sidebar = ({ markets, onMarketsChange, onProductsChange, selectedMarkets, 
 };
 
 export default Sidebar;
-
